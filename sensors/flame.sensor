@@ -1,0 +1,32 @@
+/* ================== PIN DEFINITIONS ================== */
+#define MQ2_DO     16    // MQ2 Digital Output
+#define FLAME_PIN  27    // Flame Sensor Digital Output
+#define BUZZER_PIN 13    // Buzzer
+
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(MQ2_DO, INPUT);
+  pinMode(FLAME_PIN, INPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+
+  digitalWrite(BUZZER_PIN, LOW);   // Buzzer OFF
+}
+
+void loop() {
+
+  int gas   = digitalRead(MQ2_DO);
+  int flame = digitalRead(FLAME_PIN);
+
+  /* ================== ALARM LOGIC ================== */
+  // MQ2 & Flame Sensors Active LOW
+  if (gas == LOW || flame == LOW) {
+    digitalWrite(BUZZER_PIN, LOW);
+    Serial.println("⚠️ ALERT: Gas or Flame Detected!");
+  } else {
+    digitalWrite(BUZZER_PIN, HIGH);
+    Serial.println("✅ Safe Environment");
+  }
+
+  delay(500);
+}
